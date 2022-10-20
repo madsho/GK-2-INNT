@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './Components/HomeScreen';
 import firebase from "firebase/compat";
 import Stacknavigatorlogin from './Components/StackNavigatorlogin';
-import Stacknavigatorhome from './Components/StackNavigatorhome';
+import TabNavigatorHome from './Components/Tabnavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 
@@ -53,11 +53,12 @@ const LoginPage = () => {
       
   );
 }
+//
 
 const Homepage = () => {   
   return (
       <NavigationContainer>
-      <Stacknavigatorhome/>
+      <TabNavigatorHome/>
       </NavigationContainer>
   );
 }
