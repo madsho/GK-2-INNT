@@ -26,7 +26,7 @@ function List () {
       console.log(error); 
     }) 
 }
-    
+    //TEST
 
     return (
         <SafeAreaView style={styles.container} >
