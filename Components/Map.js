@@ -67,7 +67,6 @@ const changeaddres = async () => {
       <SafeAreaView>
         <Button title='Update shops' onPress={() => {update()}}></Button>
         <Button style title="update location" onPress={updateLocation} />
-        <Button style title="update location" onPress={updateLocation} />
             <TextInput
                 placeholder="Enter address"
                 value={defineAddres}
