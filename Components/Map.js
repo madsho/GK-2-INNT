@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, Button, StyleSheet } from 'react-native';
+import {SafeAreaView, Text, Button, StyleSheet, View, TextInput } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat";
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-import { Marker } from 'react-native-maps';
+import MapView, { MarkerAnimated, PROVIDER_GOOGLE } from 'react-native-maps'
+import { Marker, TouchableHighlight } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {Accuracy} from "expo-location";
 
@@ -19,7 +19,7 @@ function Map () {
   const [shops, setShops] = useState({}); 
 
   //Use effect https://docs.expo.dev/versions/latest/sdk/location/
-  /*useEffect(() => {
+  useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -27,17 +27,10 @@ function Map () {
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
-      const region = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 1.0,
-        longitudeDelta: 1.0
-    }
-      //setCurrentLocation(location);
-      //console.log(location);
-      //setRegion(region);
+      setCurrentLocation(location.coords)
+      console.log(currentLocation);
     })();
-  }, []);*/
+  }, []);
 
 
   //øvelse 8 maps sætter usestate med brugerens lokation
@@ -61,24 +54,26 @@ function Map () {
   }) 
   
 }
-
-console.log(shops[0].geometry);
-
- function placeMarkers(){
-
-  //Try to makes markers on the map
-  return(
-    <SafeAreaView>
-   
-      </SafeAreaView>
-  )
- 
-}
+const [defineAddres, setDefineAddress] = useState(""); 
+const changeaddres = async () => {
+  await Location.geocodeAsync(defineAddres).then((data) =>{
+      let coordinates = data[0]
+      setCurrentLocation(coordinates)
+      
+  }), update()
+};
 
     return (
       <SafeAreaView>
         <Button title='Update shops' onPress={() => {update()}}></Button>
         <Button style title="update location" onPress={updateLocation} />
+        <Button style title="update location" onPress={updateLocation} />
+            <TextInput
+                placeholder="Enter address"
+                value={defineAddres}
+                onChangeText={(defineAddres) => setDefineAddress(defineAddres)}
+                style={styles.inputField}/>
+            <Button title='Change address' onPress={() => changeaddres()}/>
 
         <MapView
               style ={styles.map}
@@ -90,12 +85,16 @@ console.log(shops[0].geometry);
               latitudeDelta: 0.05,
               longitudeDelta: 0.05
               }}>
+      
                 {Array.isArray(shops) 
                ? shops.map((shop, index) =>{
                   return(
-                  <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}></Marker>
+                  <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}>
+                    
+                  </Marker>
                   )
                   }) : null}
+
               </MapView>      
       </SafeAreaView>
     );

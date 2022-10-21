@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, Button, StyleSheet, ScrollView } from 'react-native';
+import {SafeAreaView, Text, Button, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat";
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
@@ -14,13 +14,14 @@ function List () {
     //Usestate for all shops 
     const [shops, setShops] = useState({}); 
     const [currentLocation, setCurrentLocation] = useState({latitude: 55.687241, longitude: 12.561859}); 
-    const [defineAddres, setDefineAddress] = useState({latitude: 55.687241, longitude: 12.561859}); 
+    const [defineAddres, setDefineAddress] = useState(""); 
 
 
     const updateLocation = async () => {
         await Location.getCurrentPositionAsync({accuracy: Accuracy.Balanced}).then((item)=>{
-          setCurrentLocation(item.coords)
-        } );
+        setCurrentLocation(item.coords)
+        }
+        ), update()
       };
     
 //function so only fetches when button is run 
@@ -38,11 +39,26 @@ function List () {
     }) 
 }
 
+
+const changeaddres = async () => {
+    await Location.geocodeAsync(defineAddres).then((data) =>{
+        let coordinates = data[0]
+        setCurrentLocation(coordinates)
+        
+    }), update()
+ };
+
     return (
         <SafeAreaView style={styles.container} >
             <Text>Closest shops:</Text>
             <Button title='Update shops' onPress={() => {update()}}></Button>
             <Button style title="update location" onPress={updateLocation} />
+            <TextInput
+                placeholder="Enter address"
+                value={defineAddres}
+                onChangeText={(defineAddres) => setDefineAddress(defineAddres)}
+                style={styles.inputField}/>
+            <Button title='Change address' onPress={() => changeaddres()}/>
             <ScrollView>
             {
                 Array.isArray(shops) 
@@ -56,6 +72,8 @@ function List () {
                     )
                 }) : null}
                 </ScrollView>
+
+               
         </SafeAreaView>
     );
 
@@ -68,7 +86,12 @@ const styles = StyleSheet.create({
         paddingTop: '5%',
         backgroundColor: '#ecf0f1',
         padding: 8,
-    },
+    },inputField: {
+      borderWidth: 1,
+      margin: 10,
+      padding: 10,
+      
+    }
 });
 
 export default List
