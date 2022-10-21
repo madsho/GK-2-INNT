@@ -6,16 +6,27 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { CurrentRenderContext } from '@react-navigation/native';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import {Accuracy} from "expo-location";
 
 //Home screen 
 function List () {
 
     //Usestate for all shops 
     const [shops, setShops] = useState({}); 
+    const [currentLocation, setCurrentLocation] = useState({latitude: 55.687241, longitude: 12.561859}); 
+    const [defineAddres, setDefineAddress] = useState({latitude: 55.687241, longitude: 12.561859}); 
+
+
+    const updateLocation = async () => {
+        await Location.getCurrentPositionAsync({accuracy: Accuracy.Balanced}).then((item)=>{
+          setCurrentLocation(item.coords)
+        } );
+      };
+    
 //function so only fetches when button is run 
  function update(){
     //API url with my personal API - nearby place with coordinates of Copenhagen a radius of 1km and type is set to supermaket 
-    const URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=55.687241%2C12.561859&radius=1000&type=supermarket&key=AIzaSyBQeOKGnEHgTHLWsuYcWpCJnzMbMGU_hOI`;
+    const URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude}%2C${currentLocation.longitude}&radius=1000&type=supermarket&key=AIzaSyBQeOKGnEHgTHLWsuYcWpCJnzMbMGU_hOI`;
 //Fetch as shown in google documentation 
     fetch(URL).then(data=> {
       return data.json() //The data ie all places fecthed are made returned
@@ -26,12 +37,12 @@ function List () {
       console.log(error); 
     }) 
 }
-    //TEST
 
     return (
         <SafeAreaView style={styles.container} >
             <Text>Closest shops:</Text>
-            <Button title='Update' onPress={() => {update()}}></Button>
+            <Button title='Update shops' onPress={() => {update()}}></Button>
+            <Button style title="update location" onPress={updateLocation} />
             <ScrollView>
             {
                 Array.isArray(shops) 
