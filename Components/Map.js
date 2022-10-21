@@ -62,22 +62,17 @@ function Map () {
   
 }
 
-
+console.log(shops[0].geometry);
 
  function placeMarkers(){
 
   //Try to makes markers on the map
   return(
     <SafeAreaView>
-    {Array.isArray(shops) 
-      ? shops.map((shop, index) =>{
-        return(
-        <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}></Marker>
-        
-        )
-      }) : null}
+   
       </SafeAreaView>
   )
+ 
 }
 
     return (
@@ -94,8 +89,15 @@ function Map () {
               longitude: currentLocation.longitude,
               latitudeDelta: 0.05,
               longitudeDelta: 0.05
-              }}
-              >{placeMarkers()}</MapView>      
+              }}>
+               {Array.isArray(shops) 
+      ? shops.map((shop, index) =>{
+        return(
+        <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}></Marker>
+        
+        )
+      }) : null}
+              </MapView>      
       </SafeAreaView>
     );
     
