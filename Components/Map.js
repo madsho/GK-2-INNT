@@ -90,13 +90,12 @@ console.log(shops[0].geometry);
               latitudeDelta: 0.05,
               longitudeDelta: 0.05
               }}>
-               {Array.isArray(shops) 
-      ? shops.map((shop, index) =>{
-        return(
-        <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}></Marker>
-        
-        )
-      }) : null}
+                {Array.isArray(shops) 
+               ? shops.map((shop, index) =>{
+                  return(
+                  <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}></Marker>
+                  )
+                  }) : null}
               </MapView>      
       </SafeAreaView>
     );
