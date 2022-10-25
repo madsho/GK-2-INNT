@@ -88,7 +88,9 @@ const changeaddres = async () => {
                 {Array.isArray(shops) 
                ? shops.map((shop, index) =>{
                   return(
-                  <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}>
+                  <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}
+                  title = {shop.name}
+                  description = {shop.vicinity}>
                     
                   </Marker>
                   )
