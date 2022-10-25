@@ -14,8 +14,6 @@ function Map () {
 //https://www.youtube.com/watch?v=AzjWv1X-uyg&ab_channel=TheFlutterFactory
 
   const [currentLocation, setCurrentLocation] = useState({latitude: 55.687241, longitude: 12.561859});  //Standard region so the maps opens
-  //const [region, setRegion] = useState(null)
-  //const [marker, setMarker] = useState({longitude: 0, latitude: 0});
   const [shops, setShops] = useState({}); 
 
   //Use effect https://docs.expo.dev/versions/latest/sdk/location/
@@ -33,7 +31,7 @@ function Map () {
   }, []);
 
 
-  //øvelse 8 maps sætter usestate med brugerens lokation
+  //Get the current location. Exercise 8 /App.js lines 45-49 https://github.com/Innovationg-og-ny-teknologi-2021/8_maps_solution/blob/main/App.js
   const updateLocation = async () => {
     await Location.getCurrentPositionAsync({accuracy: Accuracy.Balanced}).then((item)=>{
       setCurrentLocation(item.coords) 
@@ -48,19 +46,20 @@ function Map () {
     return data.json()
   }).then(jsonData => {
    console.log(jsonData.results)
-   setShops(jsonData.results);
+   setShops(jsonData.results); //Sets the data recieved as the nearby shops
   }).catch(error=> {
     console.log(error);
   }) 
   
 }
+// Usestate for changing address 
 const [defineAddres, setDefineAddress] = useState(""); 
 const changeaddres = async () => {
   await Location.geocodeAsync(defineAddres).then((data) =>{
-      let coordinates = data[0]
-      setCurrentLocation(coordinates)
+      let coordinates = data[0]//The data is an array and the coordinates are located in the first position
+      setCurrentLocation(coordinates)//the location is set as the current location 
       
-  }), update()
+  }), update()//after this the new shops are recieved 
 };
 
     return (
@@ -91,7 +90,6 @@ const changeaddres = async () => {
                   <Marker key={index} coordinate={{latitude: shop.geometry.location.lat, longitude: shop.geometry.location.lng}}
                   title = {shop.name}
                   description = {shop.vicinity}>
-                    
                   </Marker>
                   )
                   }) : null}

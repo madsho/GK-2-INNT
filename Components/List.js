@@ -11,22 +11,24 @@ import {Accuracy} from "expo-location";
 //Home screen 
 function List () {
 
-    //Usestate for all shops 
+    //Usestate for all shops recieved from the google places api 
     const [shops, setShops] = useState({}); 
+    //Usetate for the location. Coordinates are inserted else the map wouldn't load
     const [currentLocation, setCurrentLocation] = useState({latitude: 55.687241, longitude: 12.561859}); 
+    //Usestate for the address defined by the user 
     const [defineAddres, setDefineAddress] = useState(""); 
 
-
+//Get the current location. Exercise 8 /App.js lines 45-49 https://github.com/Innovationg-og-ny-teknologi-2021/8_maps_solution/blob/main/App.js
     const updateLocation = async () => {
         await Location.getCurrentPositionAsync({accuracy: Accuracy.Balanced}).then((item)=>{
         setCurrentLocation(item.coords)
         }
-        ), update()
+        ), update() // runs update function so all the closes shops is recieved 
       };
     
-//function so only fetches when button is run 
+
  function update(){
-    //API url with my personal API - nearby place with coordinates of Copenhagen a radius of 1km and type is set to supermaket 
+    //API url with my personal API - nearby place with coordinates of users coordinates a radius of 1km and type is set to supermaket 
     const URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${currentLocation.latitude}%2C${currentLocation.longitude}&radius=1000&type=supermarket&key=AIzaSyBQeOKGnEHgTHLWsuYcWpCJnzMbMGU_hOI`;
 //Fetch as shown in google documentation 
     fetch(URL).then(data=> {
@@ -39,19 +41,19 @@ function List () {
     }) 
 }
 
-
+//Defining a address
 const changeaddres = async () => {
-    await Location.geocodeAsync(defineAddres).then((data) =>{
-        let coordinates = data[0]
-        setCurrentLocation(coordinates)
+    await Location.geocodeAsync(defineAddres).then((data) =>{ //Geocode converts the address to coordinates 
+        let coordinates = data[0] //The data is an array and the coordinates are located in the first position
+        setCurrentLocation(coordinates)//the location is set as the current location 
         
-    }), update()
+    }), update() //after this the new shops are recieved 
  };
 
     return (
         <SafeAreaView style={styles.container} >
             <Text>Closest shops:</Text>
-            <Button title='Update shops' onPress={() => {update()}}></Button>
+            <Button title='Update shops' onPress={() => {update()}}></Button> 
             <Button style title="update location" onPress={updateLocation} />
             <TextInput
                 placeholder="Enter address"

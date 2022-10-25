@@ -3,7 +3,7 @@ import {SafeAreaView, Text, Button, StyleSheet} from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat";
 
-
+//Tab navigator 
 const navController = (navigation, route) =>{
     navigation.navigate(route)
 }
@@ -22,7 +22,6 @@ function HomeScreen ({navigation}) {
             <Button title="Map" onPress={() => navController(navigation, 'Map')} />
             <Button title="List" onPress={() => navController(navigation, 'List')} />
             <Button onPress={() => logout()} title="Log out" />
-            
         </SafeAreaView>
     );
 
