@@ -58,7 +58,6 @@ const LoginPage = () => {
 const Homepage = () => {   
   return (
       <NavigationContainer>
-        <HomeScreen/>
       <TabNavigatorHome/>
       </NavigationContainer>
   );
